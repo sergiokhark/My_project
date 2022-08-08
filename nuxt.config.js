@@ -37,7 +37,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -52,20 +52,17 @@ export default {
   auth: {
     strategies: {
       local: {
-        token: {
-          property: 'token',
-          global: true,
-          // required: true,
-          // type: 'Bearer'
-        },
-        user: {
-          property: 'user',
-          // autoFetch: true
-        },
         endpoints: {
-          login: { url: 'https://0uh7d1z6ij.api.quickmocker.com', method: 'post' },
-          logout: { url: '/api/auth/logout', method: 'post' },
-          user: { url: '/api/auth/user', method: 'get' }
+          login: { url: 'https://0uh7d1z6ij.api.quickmocker.com', method: 'post', propertyName: 'data.access_token' },
+          logout: { url: '/auth/logout', method: 'post' },
+          user: { url: 'https://0uh7d1z6ij.api.quickmocker.com', method: 'get', propertyName: 'data' }
+        },
+        logout: {url:'auth/logout', method: 'post'},
+        redirect: {
+          login: '/new',
+          home: '/new',
+          //logout: '/new',
+          //callback: '/new'
         }
       }
     }
