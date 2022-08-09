@@ -21,7 +21,8 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -55,17 +56,16 @@ export default {
         endpoints: {
           login: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'post', propertyName: 'data.access_token' },
           logout: { url: '/auth/logout', method: 'post' },
-          user: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'get', propertyName: 'data.attributes' }
+          user: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'get', propertyName: 'data' }
         },
-        logout: {url:'auth/logout', method: 'post'},
         redirect: {
           login: '/new',
           home: '/new',
-          //logout: '/new',
-          //callback: '/new'
-        }
+        },
+        plugins: ['~/plugins/auth.js'],
       }
-    }
+    },
+    
   }
 }
 
