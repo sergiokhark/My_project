@@ -54,18 +54,24 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'post', propertyName: 'data.access_token' },
+          login: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'post', propertyName: 'access_token' },
           logout: { url: '/auth/logout', method: 'post' },
-          user: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'get', propertyName: 'data' }
+          user: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'get', propertyName: false }
         },
-        redirect: {
-          login: '/new',
-          home: '/new',
-        },
-        plugins: ['~/plugins/auth.js'],
+      }
+    },   
+    redirect: {
+      login: '/new',
+      home: '/new',
+    },
+    plugins: ['./plugins/auth.js'],
+    cookie: {
+      options: {
+        sameSite: true,
       }
     },
-    
+    localStorage: false,
+    resetOnError: true,
   }
 }
 

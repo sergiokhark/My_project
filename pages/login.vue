@@ -10,15 +10,17 @@
 import UserAuthForm from '~/components/UserAuthForm'
 
 export default {
-    components: {
-        UserAuthForm
-    },
-    methods: {
-        loginUser(loginInfo) {
-            this.$auth.loginWith('local', {
-                data: loginInfo
-            })
+    middleware: 'auth',
+    auth: 'guest',
+        components: {
+            UserAuthForm
+        },
+        methods: {
+            loginUser(loginInfo) {
+                this.$auth.loginWith('local', {
+                    data: loginInfo
+                })
+            }
         }
-    }
 }
 </script>
