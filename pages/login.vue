@@ -10,7 +10,6 @@
 import UserAuthForm from '~/components/UserAuthForm'
 
 export default {
-    middleware: 'auth',
     auth: 'guest',
         components: {
             UserAuthForm

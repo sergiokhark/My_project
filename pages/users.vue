@@ -29,12 +29,14 @@ export default {
             ],
         }
     },
+    middleware: 'auth',
+    layout: 'login',
     mounted() {
         axios.get('https://run.mocky.io/v3/31fafaf5-cc55-4cad-a945-ea2b9be78e3a')
         .then(response => (this.users = response.data.data))
     },
     computed: {
-     
+        
     },
     methods: {
         

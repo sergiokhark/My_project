@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Test page</h1>
+    <h1>Main page</h1>
+    <p>Please login in ...</p>
   </div>
 </template>
 
