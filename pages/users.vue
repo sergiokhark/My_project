@@ -181,8 +181,15 @@
 <script>
 
 import axios from 'axios'
+import {mapActions} from 'vuex'
 
 export default {
+  async asyncData() {
+    getUsers()
+    return {
+      users
+    }
+  },
   data() {
     return {
       headers: [
@@ -197,7 +204,6 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       search: '',
-      users: [],
       dialog: false,
       dialogDelete: false,
       editedIndex: -1,
@@ -229,13 +235,7 @@ export default {
   },
   middleware: 'auth',
   layout: 'login',
-  mounted() {
-    axios.get('https://run.mocky.io/v3/f2c2e2f8-0de4-446d-af5d-52895b8064f9')
-    .then(response => (this.users = response.data))
-
-  },
   computed: {
-    
     formTitle () {
         return this.editedIndex === -1 ? 'New User' : 'Edit User'
     },
@@ -277,6 +277,9 @@ export default {
         }
         this.close()
     },
+    ...mapActions({
+      getUsers: 'getUsers'
+    })
   },
   watch: {
       dialog (val) {
