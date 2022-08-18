@@ -10,7 +10,7 @@
 import UserAuthForm from '~/components/UserAuthForm'
 
 export default {
-    //layout: 'login',
+    layout: 'login',
     
     components: {
         UserAuthForm

@@ -1,12 +1,26 @@
 <template>
-  <div>
-    <h1>Main page</h1>
-    <p>Please login in ...</p>
-  </div>
+    <v-container>
+        <h1>Login</h1>
+
+        <UserAuthForm buttonText="Login" :submitForm="loginUser" :hasName="false" />
+    </v-container>
 </template>
 
 <script>
+import UserAuthForm from '~/components/UserAuthForm'
+
 export default {
-  
+    layout: 'login',
+    auth: 'guest',
+        components: {
+            UserAuthForm
+        },
+        methods: {
+            loginUser(loginInfo) {
+                this.$auth.loginWith('local', {
+                    data: loginInfo
+                })
+            }
+        }
 }
 </script>

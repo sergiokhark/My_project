@@ -1,7 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  mode: 'universal',
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - My_project',
@@ -39,7 +38,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    'vue-toastification/nuxt'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -56,22 +56,20 @@ export default {
       local: {
         endpoints: {
           login: { url: 'https://run.mocky.io/v3/ad074fc8-d5a1-4099-bb8d-be08ada4e9c5', method: 'post', propertyName: 'access_token' },
-          logout: { url: '/auth/logout', method: 'delete' },
+          logout: { url: 'https://run.mocky.io/v3/550028d1-a82f-4cae-9c97-aac0dbddac74', method: 'post' },
           user: { url: 'https://run.mocky.io/v3/7b1743f5-5650-4353-92cc-081ee6a07564', method: 'get', propertyName: false }
         },
       }
     },   
     redirect: {
       login: '/login',
-      home: '/users',
+      home: '/home',
     },
-    plugins: ['./plugins/auth.js'],
+    plugins: ['./plugins/auth.js',
+      '~/plugins/vue-select.js'],
     localStorage: false,
     resetOnError: true,
   },
-  //router: {
-  //  middleware: ['auth']
-  //}
 }
 
 
