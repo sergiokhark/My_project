@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-select
+    <!-- <v-select
       v-model="selectedEmail"
       :options="users"
       label="email"
       @input="getUserByEmail"
       :reduce="email => email.id"
       clearable
-    ></v-select>
+    ></v-select> -->
     <v-data-table
       :headers="headers"
       :items="users"
@@ -29,125 +29,11 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          
-          <v-dialog
-            v-model="dialog"
-            max-width="650px"
-          >
-          
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-              >
-                Add user
-              </v-btn>
-              
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
 
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.name"
-                        label="Name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.username"
-                        label="Username"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.email"
-                        label="Email"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.address.city"
-                        label="City"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.address.street"
-                        label="Street"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.website"
-                        label="Site"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        v-model="editedItem.phone"
-                        label="Phone"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="close"
-                >
-                  Cancel
-                </v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="save"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <!-- тут был v-dialog -->
+          
+            <EditDialog :formTitle="formTitle" :editedItem="editedItem" :defaultItem="defaultItem" :dialog="dialog" />
+          
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5">Are you sure?</v-card-title>
@@ -184,8 +70,12 @@
 
 import axios from 'axios'
 import {mapActions} from 'vuex'
+import EditDialog from '~/components/EditDialog'
 
 export default {
+  components: {
+    EditDialog
+  },
   data() {
     return {
       users: [],
@@ -248,17 +138,15 @@ export default {
         this.editedItem = Object.assign({}, item)
         this.dialogDelete = true
     },
-    deleteItemConfirm () {
-      const p = new Promise( (resolve, reject) => {
-        resolve(this.deleteUser())
-      })
-      p.then(() => {
+    async deleteItemConfirm () {
+      try {
+        await this.deleteUser()
         this.$toast.success('User deleted successfully')
-      })
-      p.catch(() => {
+      } catch (e) {
         this.$toast.error('User deletion error')
-      })
+      } finally {
         this.closeDelete()
+      }
     },
     close () {
         this.dialog = false
@@ -274,17 +162,15 @@ export default {
           this.editedIndex = -1
         })
     },
-    save () {
-      const p = new Promise( (resolve, reject) => {
-        resolve(this.createUser())
-      })
-      p.then(() => {
+    async save () {
+      try {
+        await this.createUser()
         this.$toast.success('User successfully created')
-      })
-      p.catch(() => {
+      } catch (e) {
         this.$toast.error('User creation error')
-      })
-      this.close()
+      } finally {
+        this.close()
+      }
     },
     ...mapActions({
       getUsers: 'getUsers',
@@ -292,11 +178,6 @@ export default {
       deleteUser: 'deleteUser',
       //editUser: 'editUser'
     }),
-    
-    getUserByEmail() {
-    //  const response = fetch(`https://jsonplaceholder.typicode.com/users/${this.selectedEmail}`)
-    //  this.users = response.json()
-    }
   },
   watch: {
       dialog (val) {
