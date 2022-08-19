@@ -60,28 +60,19 @@
         </v-container>
       </v-card-text>
 
-      <!-- <v-card-actions>
+      <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-        <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-      </v-card-actions> -->
+        <v-btn color="blue darken-1" text @click="$emit('close')"> Cancel </v-btn>
+        <v-btn color="blue darken-1" text @click="$emit('save')"> Save </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-        //dialog: false,
-    }
-  },
   props: {
     editedItem: {
-        type: Object,
-        default: () => {},
-    },
-    defaultItem: {
         type: Object,
         default: () => {},
     },
@@ -93,10 +84,6 @@ export default {
         type: Boolean,
         default: false
     },
-    dialogDelete: {
-        type: Boolean,
-        default: false
-    }
   }
           
 }
