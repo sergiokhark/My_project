@@ -8,6 +8,12 @@
       :reduce="email => email.id"
       clearable
     ></v-select> -->
+
+    <v-card>
+      <v-btn color="primary" dark class="mb-2" @click="createDialog = true">
+        Add
+      </v-btn>
+    </v-card>
     <v-data-table
       :headers="headers"
       :items="users"
@@ -29,57 +35,38 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-            <EditDialog
-              :formTitle="formTitle"  
-              :dialog="dialog"
-              @close="close"
+
+            <!-- Компонент Add user -->
+            <ModalDialog
+              formTitle="Add user"  
+              :dialog="createDialog"
+              :created="true"
+              @close="closeCreateDialog"
+              @create="create"
+            > 
+              <DialogFields :editedItem="editedItem" />
+            </ModalDialog>
+            
+            <!-- Компонент Edit user -->
+            <ModalDialog
+              formTitle="Edit user"  
+              :dialog="editDialog"
+              @close="editDialog = false"
               @save="save"
             > 
-              <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.name"
-                    label="Name"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.username"
-                    label="Username"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.email"
-                    label="Email"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.address.city"
-                    label="City"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.address.street"
-                    label="Street"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.website"
-                    label="Site"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedItem.phone"
-                    label="Phone"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </EditDialog>
+              <DialogFields :editedItem="editedItem" />
+            </ModalDialog>
+
+            <!-- Компонент Confirm delete user -->
+            <ModalDialog
+              formTitle="Delete user"
+              :dialog="deleteDialog"
+              btnName="Delete"
+              @close="deleteDialog = false"
+              @save="removeItem"
+            >
+              <h2>Are you sure?</h2>
+            </ModalDialog>
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
@@ -92,7 +79,7 @@
         </v-icon>
         <v-icon
           small
-          @click="deleteItem(item)"
+          @click="confirmDeleteDialog(item)"
         >
           mdi-delete
         </v-icon>
@@ -105,11 +92,13 @@
 
 import axios from 'axios'
 import {mapActions} from 'vuex'
-import EditDialog from '~/components/EditDialog'
+import ModalDialog from '~/components/ModalDialog'
+import DialogFields from '~/components/DialogFields'
 
 export default {
   components: {
-    EditDialog
+    ModalDialog,
+    DialogFields
   },
   data() {
     return {
@@ -125,8 +114,9 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       search: '',
-      dialog: false,
-      editedIndex: -1,
+      createDialog: false,
+      editDialog: false,
+      deleteDialog: false,
       editedItem: {
         name: '',
         username: '',
@@ -149,56 +139,63 @@ export default {
         website: '',
         phone: '',
       },
-      // selectedEmail: '',
+      deleteItem: null,
     }
   },
   async mounted() {
     this.users = await this.getUsers()
   },
   middleware: 'auth',
-  computed: {
-    formTitle () {
-        return this.editedIndex === -1 ? 'New User' : 'Edit User'
-    },
-  },
   methods: {
     editItem (item) {
-        this.editedIndex = this.users.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+      this.editedItem = JSON.parse(JSON.stringify(item))
+      this.editDialog = true
     },
-    async deleteItem () {
-      try {
-        await this.deleteUser()
-        this.$toast.success('User deleted successfully')
-      } catch (e) {
-        this.$toast.error('User deletion error')
-      } finally {
-        this.close()
-      }
+    closeCreateDialog () {
+      this.createDialog = false
+      this.$nextTick(() => {
+        this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
+      })
     },
-    close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-    },
-    async save () {
+    async create () {
       try {
         await this.createUser()
         this.$toast.success('User successfully created')
       } catch (e) {
-        this.$toast.error('User creation error')
+        this.$toast.error('User create error')
       } finally {
-        this.close()
+        this.closeCreateDialog ()
       }
+    },
+    async save () {
+      try {
+        await this.updateUser()
+        this.$toast.success('User successfully updated')
+      } catch (e) {
+        this.$toast.error('User update error')
+      } finally {
+        this.editDialog = false
+      }
+    },
+    async removeItem () {
+      try {
+        await this.deleteUser()
+        this.$toast.success('User deleted successfully')
+      } catch (e) {
+        this.$toast.error('User delete error')
+      } finally {
+        this.deleteDialog = false
+      }
+    },
+    confirmDeleteDialog (item) {
+      this.deleteDialog = true
+      this.deleteItem = item
     },
     ...mapActions({
       getUsers: 'getUsers',
       createUser: 'createUser',
+      updateUser: 'updateUser',
       deleteUser: 'deleteUser',
-      //editUser: 'editUser'
     }),
   },
 }

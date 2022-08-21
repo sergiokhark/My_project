@@ -1,10 +1,5 @@
 <template>
   <v-dialog v-model="dialog" max-width="650px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-        Add
-      </v-btn>
-    </template>
     <v-card>
       <v-card-title>
         <span class="text-h5">{{ formTitle }}</span>
@@ -17,7 +12,8 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="$emit('close')"> Cancel </v-btn>
-        <v-btn color="blue darken-1" text @click="$emit('save')"> Save </v-btn>
+        <v-btn v-if="created" color="blue darken-1" text @click="$emit('create')"> Create </v-btn>
+        <v-btn v-else color="blue darken-1" text @click="$emit('save')"> {{ btnName }} </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -34,7 +30,15 @@ export default {
         type: Boolean,
         default: false
     },
+    created: {
+      type: Boolean,
+      default: false
+    },
+    btnName: {
+      type: String,
+      default: 'Save'
+    }
   }
-          
 }
+          
 </script>

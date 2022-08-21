@@ -2,17 +2,18 @@ import axios from 'axios'
 
 export const actions = {
   async getUsers() {
-    const response = await fetch('https://jsonplaceholder.typicode.com/users/')
-    const users = await response.json()
+    const res = await fetch('https://jsonplaceholder.typicode.com/users/')
+    const users = await res.json()
     return users
   },
   async createUser() {
-    const response = await axios.post('https://run.mocky.io/v3/a366bb9a-819d-4fe0-8447-87eb3b526e76')
+    const res = await axios.post('https://run.mocky.io/v3/b9252bea-324b-44a3-9e49-d6bf561f9914')
   },
   async deleteUser() {
-    const response = await axios.delete('https://run.mocky.io/v3/69a098f7-f7db-4a58-9116-1a9e77f4004f')
+    const res = await axios.delete('https://run.mocky.io/v3/69a098f7-f7db-4a58-9116-1a9e77f4004f')
   },
-  
-  
+  async updateUser() {
+    const res = await axios.put('https://run.mocky.io/v3/4d9eea3e-bee2-4531-8665-091365446530')
+  }
 }
 
