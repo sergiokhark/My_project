@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <Menu />
+    <VerticalMenu />
     <v-main>
       <v-container>
         <Nuxt />
@@ -12,6 +13,7 @@
 
 <script>
 import Menu from '~/components/Menu'
+import VerticalMenu from '~/components/VerticalMenu'
 
 export default {
   components: {
