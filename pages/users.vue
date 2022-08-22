@@ -54,7 +54,7 @@
             <v-col>
               <v-text-field
                 append-icon="mdi-magnify"
-                v-model="filter.address.city"
+                v-model="filter.city"
                 label="City"
                 @input="getFilteredUsers"
               />
@@ -124,9 +124,11 @@ export default {
         { text: 'Name', value: 'name' },
         { text: 'Username', value: 'username' },
         { text: 'Email', value: 'email' },
-        { text: 'City', value: 'address.city' },
-        { text: 'Street', value: 'address.street' },
         { text: 'Site', value: 'website' },
+        { text: 'Company', value: 'company' },
+        { text: 'City', value: 'city' },
+        { text: 'Street', value: 'street' },
+        { text: 'Suite', value: 'suite' },
         { text: 'Phone', value: 'phone' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
@@ -138,22 +140,22 @@ export default {
         name: '',
         username: '',
         email: '',
-        address: {
-          city: '',
-          street: '',
-        },
         website: '',
+        company: '',
+        city: '',
+        street: '',
+        suite: '',
         phone: '',
       },
       defaultItem: {
         name: '',
         username: '',
         email: '',
-        address: {
-          city: '',
-          street: '',
-        },
         website: '',
+        company: '',
+        city: '',
+        street: '',
+        suite: '',
         phone: '',
       },
       deleteItem: null,
@@ -161,9 +163,7 @@ export default {
         name: null,
         email: null,
         username: null,
-        address: {
-          city: null,
-        }
+        city: null,
       },
     }
   },
@@ -188,6 +188,10 @@ export default {
     closeEditDialog() {
       this.editDialog = false
       this.getDefaultItem()
+    },
+    confirmDeleteDialog(item) {
+      this.deleteDialog = true
+      this.deleteItem = item
     },
     async create() {
       try {
@@ -219,10 +223,6 @@ export default {
         this.deleteDialog = false
       }
     },
-    confirmDeleteDialog(item) {
-      this.deleteDialog = true
-      this.deleteItem = item
-    },
     ...mapActions({
       getUsers: 'getUsers',
       createUser: 'createUser',
@@ -245,7 +245,7 @@ export default {
 
 <style scoped>
 .filter {
-  max-width: 700px;
+  max-width: 800px;
   margin: 0 auto;
 }
 </style>

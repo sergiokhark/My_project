@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const actions = {
   async getUsers() {
-    const res = await fetch('https://jsonplaceholder.typicode.com/users/')
+    const res = await fetch('https://run.mocky.io/v3/804e6fd9-f63a-444e-95c1-8a4b03f0ad71')
     const users = await res.json()
     return users
   },
