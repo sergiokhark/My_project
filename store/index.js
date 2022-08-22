@@ -6,6 +6,10 @@ export const actions = {
     const users = await res.json()
     return users
   },
+  getProducts() {
+    axios.get('https://run.mocky.io/v3/aa058c24-65e0-469c-b202-9d5d2bc1d494')
+    .then(response => response.data)
+  },
   async createUser() {
     const res = await axios.post('https://run.mocky.io/v3/b9252bea-324b-44a3-9e49-d6bf561f9914')
   },
