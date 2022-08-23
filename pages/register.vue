@@ -1,7 +1,5 @@
 <template>
     <v-container>
-        <h1>Register</h1>
-
         <UserAuthForm buttonText="Register" :submitForm="registerUser" hasName="true" />
     </v-container>
 </template>
@@ -17,7 +15,8 @@ export default {
     },
     methods: {
         registerUser(registrationInfo) {
-            alert('Pressed a button')
+            alert('You are successfully registered')
+            document.location.href = '/'
         }
     }
 }

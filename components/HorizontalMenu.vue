@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <v-container class="py-0 fill-height">
+    <v-icon class="mr-5" >
+      mdi-cart
+    </v-icon>
     <v-btn text to="/home">Home</v-btn>
     <v-btn text to="/users">Users</v-btn>
     <v-btn text to="/products">Products</v-btn>
@@ -12,7 +15,5 @@
       <v-btn text to="/home">Login</v-btn>
       <v-btn text to="/register">Register</v-btn>
     </div>
-  </div>
-    
-  
+  </v-container>
 </template>

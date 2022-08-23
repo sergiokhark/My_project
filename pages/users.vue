@@ -66,28 +66,28 @@
           </v-btn>
 
           <!-- Компонент Add user -->
-          <ModalDialog
+          <UsersModalDialog
             formTitle="Add user"
             :dialog="createDialog"
             :created="true"
             @close="closeCreateDialog"
             @create="create"
           >
-            <DialogFields :editedItem="editedItem" />
-          </ModalDialog>
+            <UsersDialogFields :editedItem="editedItem" />
+          </UsersModalDialog>
 
           <!-- Компонент Edit user -->
-          <ModalDialog
+          <UsersModalDialog
             formTitle="Edit user"
             :dialog="editDialog"
             @close="closeEditDialog"
             @save="save"
           >
-            <DialogFields :editedItem="editedItem" />
-          </ModalDialog>
+            <UsersDialogFields :editedItem="editedItem" />
+          </UsersModalDialog>
 
           <!-- Компонент Confirm delete user -->
-          <ModalDialog
+          <UsersModalDialog
             formTitle="Delete user"
             :dialog="deleteDialog"
             btnName="Delete"
@@ -95,7 +95,7 @@
             @save="removeItem"
           >
             <h2>Are you sure?</h2>
-          </ModalDialog>
+          </UsersModalDialog>
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
@@ -107,15 +107,14 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { mapActions } from 'vuex'
-import ModalDialog from '~/components/ModalDialog'
-import DialogFields from '~/components/DialogFields'
+import UsersModalDialog from '~/components/UsersModalDialog'
+import UsersDialogFields from '~/components/UsersDialogFields'
 
 export default {
   components: {
-    ModalDialog,
-    DialogFields,
+    UsersModalDialog,
+    UsersDialogFields,
   },
   data() {
     return {
@@ -232,7 +231,6 @@ export default {
     async getFilteredUsers() {
       this.users = await this.getUsers()
       for (const [key, value] of Object.entries(this.filter)) {
-        console.log(key, value)
         if (value) {
           this.users = this.users.filter((itm) => itm[key] === value)
         }
