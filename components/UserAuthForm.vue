@@ -35,7 +35,8 @@
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
-                        <v-btn dark color="#5C6BC0" v-if="!hasName" to="/register">Click here to register</v-btn>
+                        <v-btn dark color="#5C6BC0" v-if="!hasName" to="/register">Registration</v-btn>
+                        <v-btn dark color="#5C6BC0" v-if="hasName" to="/">Back</v-btn>
                         <v-spacer></v-spacer>
                         <v-btn @click="submitForm(userInfo)" :disabled="!valid">{{buttonText}}</v-btn>
                      </v-card-actions>
