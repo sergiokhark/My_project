@@ -11,6 +11,14 @@ export const actions = {
     const products = await res.json()
     return products.data
   },
+  async getOrders() {
+    const res = await axios.get('https://run.mocky.io/v3/8a0f5689-08b6-4efb-9597-880b4fc285ad')
+    return res.data.data
+  },
+  async getOrder() {
+    const res = await axios.get('https://run.mocky.io/v3/2d897b1f-8cc2-4de1-a780-1a421e3224f8')
+    return res.data.data
+  },
   async createUser() {
     await axios.post('https://run.mocky.io/v3/b9252bea-324b-44a3-9e49-d6bf561f9914')
   },

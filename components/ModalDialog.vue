@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="650px">
+  <v-dialog v-model="dialog" :max-width="dialogWidth">
     <v-card>
       <v-card-title>
         <span class="text-h5">{{ formTitle }}</span>
@@ -11,7 +11,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="$emit('close')"> Cancel </v-btn>
+        <v-btn v-if="showCancel" color="blue darken-1" text @click="$emit('close')"> Cancel </v-btn>
         <v-btn v-if="created" color="blue darken-1" text @click="$emit('create')"> Create </v-btn>
         <v-btn v-else color="blue darken-1" text @click="$emit('save')"> {{ btnName }} </v-btn>
       </v-card-actions>
@@ -22,13 +22,13 @@
 <script>
 export default {
   props: {
-    formTitle: {
-        type: String,
-        default: ''
-    },
     dialog: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false
+    },
+    formTitle: {
+      type: String,
+      default: ''
     },
     created: {
       type: Boolean,
@@ -37,6 +37,14 @@ export default {
     btnName: {
       type: String,
       default: 'Save'
+    },
+    showCancel: {
+      type: Boolean,
+      default: true
+    },
+    dialogWidth: {
+      type: String,
+      default: '700px'
     }
   }
 }

@@ -66,7 +66,7 @@
           </v-btn>
 
           <!-- Компонент Add user -->
-          <UsersModalDialog
+          <ModalDialog
             formTitle="Add user"
             :dialog="createDialog"
             :created="true"
@@ -74,20 +74,20 @@
             @create="create"
           >
             <UsersDialogFields :editedItem="editedItem" />
-          </UsersModalDialog>
+          </ModalDialog>
 
           <!-- Компонент Edit user -->
-          <UsersModalDialog
+          <ModalDialog
             formTitle="Edit user"
             :dialog="editDialog"
             @close="closeEditDialog"
             @save="save"
           >
             <UsersDialogFields :editedItem="editedItem" />
-          </UsersModalDialog>
+          </ModalDialog>
 
           <!-- Компонент Confirm delete user -->
-          <UsersModalDialog
+          <ModalDialog
             formTitle="Delete user"
             :dialog="deleteDialog"
             btnName="Delete"
@@ -95,7 +95,7 @@
             @save="removeItem"
           >
             <h2>Are you sure?</h2>
-          </UsersModalDialog>
+          </ModalDialog>
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
@@ -108,12 +108,12 @@
 
 <script>
 import { mapActions } from 'vuex'
-import UsersModalDialog from '~/components/UsersModalDialog'
+import ModalDialog from '~/components/ModalDialog'
 import UsersDialogFields from '~/components/UsersDialogFields'
 
 export default {
   components: {
-    UsersModalDialog,
+    ModalDialog,
     UsersDialogFields,
   },
   data() {

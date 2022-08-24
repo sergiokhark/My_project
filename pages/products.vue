@@ -47,36 +47,36 @@
         <v-btn color="primary" dark class="mb-2" @click="createDialog = true"> Add Product </v-btn>
         
         <!-- Компонент Add Product -->
-        <ProductsModalDialog
+        <ModalDialog
           :dialog="createDialog"
           formTitle="Add product"
-          btnSaveName="Create"
+          :created="true"
           @close="closeCreateDialog"
           @save="create"
         >
           <ProductsDialogFields :editedItem="editedItem" />
-        </ProductsModalDialog>
+        </ModalDialog>
 
         <!-- Компонент Edit Product -->
-        <ProductsModalDialog
+        <ModalDialog
           :dialog="editDialog"
           formTitle="Edit product"
           @close="closeEditDialog"
           @save='save'
         >
           <ProductsDialogFields :editedItem="editedItem" />
-        </ProductsModalDialog>
+        </ModalDialog>
 
         <!-- Компонент Delete Product -->
-        <ProductsModalDialog
+        <ModalDialog
           :dialog="deleteDialog"
           formTitle="Delete product"
-          btnSaveName="Delete"
+          btnName="Delete"
           @close="deleteDialog = false"
           @save="removeItem"
         >
           <h2>Are you sure?</h2>
-        </ProductsModalDialog>
+        </ModalDialog>
         
       </v-toolbar>
     </template>
@@ -84,21 +84,18 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="openDeleteDialog(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
-    </template>
   </v-data-table>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import ProductsModalDialog from '~/components/ProductsModalDialog'
+import ModalDialog from '~/components/ModalDialog'
 import ProductsDialogFields from '~/components/ProductsDialogFields'
 
 export default {
   middleware: 'auth',
   components: {
-    ProductsModalDialog,
+    ModalDialog,
     ProductsDialogFields
   },
   data() {

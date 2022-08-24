@@ -24,5 +24,13 @@
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
+    <v-list-item link to="/orders">
+      <v-list-item-content>
+        <v-list-item-title>
+          <v-icon class="mr-5"> mdi-cart-check </v-icon>
+          Orders
+        </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
   </v-list>
 </template>
