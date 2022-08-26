@@ -1,11 +1,14 @@
 export default {
   methods: {
-    async getFilteredItems(itemsArr, filtersArr) {
+    getFilteredItems(itemsArr, filtersArr) {
+      let arr = []
       for (const [key, value] of Object.entries(filtersArr)) {
         if (value) {
-          itemsArr = itemsArr.filter((itm) => itm[key] === value)
+          arr = itemsArr.filter((itm) => itm[key] === value)
         }
       }
+      console.log(arr)
+      return arr
     },
   },
 }

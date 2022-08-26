@@ -206,11 +206,13 @@ export default {
     },
     async getFilteredProducts() {
       this.products = await this.getProducts()
+      
       for (const [key, value] of Object.entries(this.filter)) {
         if (value) {
           this.products = this.products.filter((itm) => itm[key] === value)
         }
       }
+      
     }
   },
 }
