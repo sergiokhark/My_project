@@ -4,7 +4,7 @@
       v-model="filter.email"
       :options="users"
       label="email"
-      @input="getFilteredUsers"
+      @input="getFilteredItems(users, filter)"
       :reduce="(email) => email.email"
       clearable
     ></v-select>
@@ -32,7 +32,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.name"
                 label="Name"
-                @input="getFilteredUsers"
+                @input="getFilteredItems(users, filter)"
               />
             </v-col>
             <v-col>
@@ -40,7 +40,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.username"
                 label="Username"
-                @input="getFilteredUsers"
+                @input="getFilteredItems(users, filter)"
               />
             </v-col>
             <v-col>
@@ -48,7 +48,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.email"
                 label="Email"
-                @input="getFilteredUsers"
+                @input="getFilteredItems(users, filter)"
               />
             </v-col>
             <v-col>
@@ -56,7 +56,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.city"
                 label="City"
-                @input="getFilteredUsers"
+                @input="getFilteredItems(users, filter)"
               />
             </v-col>
           </v-row>
@@ -110,12 +110,14 @@
 import { mapActions } from 'vuex'
 import ModalDialog from '~/components/ModalDialog'
 import UsersDialogFields from '~/components/UsersDialogFields'
+import getFilteredItems from '~/mixins/getFilteredItems'
 
 export default {
   components: {
     ModalDialog,
     UsersDialogFields,
   },
+  mixins: [getFilteredItems],
   data() {
     return {
       users: [],
@@ -228,14 +230,7 @@ export default {
       updateUser: 'updateUser',
       deleteUser: 'deleteUser',
     }),
-    async getFilteredUsers() {
-      this.users = await this.getUsers()
-      for (const [key, value] of Object.entries(this.filter)) {
-        if (value) {
-          this.users = this.users.filter((itm) => itm[key] === value)
-        }
-      }
-    },
+    
   },
 }
 </script>
