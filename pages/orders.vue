@@ -3,13 +3,34 @@
     <v-card-title>
       Orders
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
+      <v-row>
+        <v-col>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-col>
+        <v-col>
+          <v-text-field
+            append-icon="mdi-magnify"
+            v-model="filter.number"
+            label="Order number"
+            @input="getFilteredOrders"
+          />
+        </v-col>
+        <v-col>
+          <v-text-field
+            append-icon="mdi-magnify"
+            v-model="filter.created_at"
+            label="Date"
+            @input="getFilteredOrders"
+          />
+        </v-col>
+      </v-row>
+      
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -50,6 +71,7 @@
 import { mapActions } from 'vuex'
 import ModalDialog from '~/components/ModalDialog'
 import OrderDetails from '~/components/OrderDetails'
+import getFilteredItems from '~/mixins/getFilteredItems'
 
 export default {
   middleware: 'auth',
@@ -57,6 +79,7 @@ export default {
     ModalDialog,
     OrderDetails
   },
+  mixins: [getFilteredItems],
   data() {
     return {
       search: '',
@@ -73,6 +96,10 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       orderDialog: false,
+      filter: {
+        number: null,
+        created_at: null
+      }
     }
   },
   async mounted() {
@@ -96,6 +123,10 @@ export default {
     },
     showCustomerInfo(){
       this.orderDialog = true
+    },
+    async getFilteredOrders() {
+      let orders = await this.getOrders()
+      this.orders = this.getFilteredItems(orders, this.filter)
     }
   },
 }

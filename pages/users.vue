@@ -4,7 +4,7 @@
       v-model="filter.email"
       :options="users"
       label="email"
-      @input="getFilteredItems(users, filter)"
+      @input="getFilteredUsers"
       :reduce="(email) => email.email"
       clearable
     ></v-select>
@@ -32,7 +32,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.name"
                 label="Name"
-                @input="getFilteredItems(users, filter)"
+                @input="getFilteredUsers"
               />
             </v-col>
             <v-col>
@@ -40,7 +40,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.username"
                 label="Username"
-                @input="getFilteredItems(users, filter)"
+                @input="getFilteredUsers"
               />
             </v-col>
             <v-col>
@@ -48,7 +48,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.email"
                 label="Email"
-                @input="getFilteredItems(users, filter)"
+                @input="getFilteredUsers"
               />
             </v-col>
             <v-col>
@@ -56,7 +56,7 @@
                 append-icon="mdi-magnify"
                 v-model="filter.city"
                 label="City"
-                @input="getFilteredItems(users, filter)"
+                @input="getFilteredUsers"
               />
             </v-col>
           </v-row>
@@ -168,7 +168,7 @@ export default {
       },
     }
   },
-  async mounted() {
+  async created() {
     this.users = await this.getUsers()
   },
   middleware: 'auth',
@@ -230,7 +230,10 @@ export default {
       updateUser: 'updateUser',
       deleteUser: 'deleteUser',
     }),
-    
+    async getFilteredUsers() {
+      let users = await this.getUsers()
+      this.users = this.getFilteredItems(users, this.filter)
+    }
   },
 }
 </script>

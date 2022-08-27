@@ -91,6 +91,7 @@
 import { mapActions } from 'vuex'
 import ModalDialog from '~/components/ModalDialog'
 import ProductsDialogFields from '~/components/ProductsDialogFields'
+import getFilteredItems from '~/mixins/getFilteredItems'
 
 export default {
   middleware: 'auth',
@@ -98,6 +99,7 @@ export default {
     ModalDialog,
     ProductsDialogFields
   },
+  mixins: [getFilteredItems],
   data() {
     return {
       products: [],
@@ -205,14 +207,8 @@ export default {
       }
     },
     async getFilteredProducts() {
-      this.products = await this.getProducts()
-      
-      for (const [key, value] of Object.entries(this.filter)) {
-        if (value) {
-          this.products = this.products.filter((itm) => itm[key] === value)
-        }
-      }
-      
+      let products = await this.getProducts()
+      this.products = this.getFilteredItems(products, this.filter)
     }
   },
 }
