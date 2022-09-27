@@ -9,5 +9,12 @@ export default {
       }
       return arr
     },
+    getResetFilter(filter) {
+      for (const [key] of Object.entries(filter)) {
+        filter[key] = null
+      }
+      return filter
+    }
   },
 }
+

@@ -1,13 +1,5 @@
 <template>
-  <div>
-    <v-select class="filter"
-      v-model="filter.email"
-      :options="users"
-      label="email"
-      @input="getFilteredUsers"
-      :reduce="(email) => email.email"
-      clearable
-    ></v-select>
+  <v-card>
     <v-data-table
       :headers="headers"
       :items="users"
@@ -19,53 +11,17 @@
         <v-toolbar flat>
           <v-toolbar-title>Users data</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-row class="filter">
-            <v-col>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <v-text-field
-                append-icon="mdi-magnify"
-                v-model="filter.name"
-                label="Name"
-                @input="getFilteredUsers"
-              />
-            </v-col>
-            <v-col>
-              <v-text-field
-                append-icon="mdi-magnify"
-                v-model="filter.username"
-                label="Username"
-                @input="getFilteredUsers"
-              />
-            </v-col>
-            <v-col>
-              <v-text-field
-                append-icon="mdi-magnify"
-                v-model="filter.email"
-                label="Email"
-                @input="getFilteredUsers"
-              />
-            </v-col>
-            <v-col>
-              <v-text-field
-                append-icon="mdi-magnify"
-                v-model="filter.city"
-                label="City"
-                @input="getFilteredUsers"
-              />
-            </v-col>
-          </v-row>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" dark class="mb-2" @click="createDialog = true">
-            Add User
-          </v-btn>
+          <div>
+            <v-btn
+              elevation="0"
+              color="primary"
+              size="small"
+              @click="createDialog = true"
+              >Add user</v-btn
+            >
+          </div>
 
-          <!-- Компонент Add user -->
+          <!-- Add user -->
           <ModalDialog
             formTitle="Add user"
             :dialog="createDialog"
@@ -76,7 +32,7 @@
             <UsersDialogFields :editedItem="editedItem" />
           </ModalDialog>
 
-          <!-- Компонент Edit user -->
+          <!-- Edit user -->
           <ModalDialog
             formTitle="Edit user"
             :dialog="editDialog"
@@ -86,7 +42,7 @@
             <UsersDialogFields :editedItem="editedItem" />
           </ModalDialog>
 
-          <!-- Компонент Confirm delete user -->
+          <!-- Confirm delete user -->
           <ModalDialog
             formTitle="Delete user"
             :dialog="deleteDialog"
@@ -97,13 +53,76 @@
             <h2>Are you sure?</h2>
           </ModalDialog>
         </v-toolbar>
+
+        <!-- Filtering -->
+        <v-card-text>
+          <v-row>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="search"
+                type="text"
+                placeholder="Search"
+              />
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="filter.name"
+                type="text"
+                placeholder="Name"
+                @change="getFilteredUsers"
+              />
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="filter.username"
+                type="text"
+                placeholder="Username"
+                @change="getFilteredUsers"
+              />
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="filter.email"
+                type="text"
+                placeholder="Email"
+                @change="getFilteredUsers"
+              />
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="filter.city"
+                type="text"
+                placeholder="City"
+                @change="getFilteredUsers"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-select
+                v-model="filter.email"
+                :options="users"
+                placeholder="Filter by email (Vue select)"
+                label="email"
+                @input="getFilteredUsers"
+                :reduce="(email) => email.email"
+                clearable
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-card-text>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="confirmDeleteDialog(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -168,7 +187,7 @@ export default {
       },
     }
   },
-  async created() {
+  async mounted() {
     this.users = await this.getUsers()
   },
   middleware: 'auth',
@@ -233,15 +252,8 @@ export default {
     async getFilteredUsers() {
       let users = await this.getUsers()
       this.users = this.getFilteredItems(users, this.filter)
-    }
+    },
   },
 }
 </script>
 
-
-<style scoped>
-.filter {
-  max-width: 800px;
-  margin: 0 auto;
-}
-</style>

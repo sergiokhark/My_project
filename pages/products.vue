@@ -1,90 +1,107 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="products"
-    :search="search"
-    :items-per-page="5"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar flat>
-        <v-toolbar-title>Products data</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-            ></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field
-                append-icon="mdi-magnify"
+  <v-card>
+    <v-data-table
+      :headers="headers"
+      :items="products"
+      :search="search"
+      :items-per-page="5"
+      class="elevation-1"
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Products data</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <div>
+            <v-btn
+              elevation="0"
+              color="primary"
+              size="small"
+              @click="createDialog = true"
+            >
+              Add Product
+            </v-btn>
+          </div>
+
+          <!-- Компонент Add Product -->
+          <ModalDialog
+            :dialog="createDialog"
+            formTitle="Add product"
+            :created="true"
+            @close="closeCreateDialog"
+            @create="create"
+          >
+            <ProductsDialogFields :editedItem="editedItem" />
+          </ModalDialog>
+
+          <!-- Компонент Edit Product -->
+          <ModalDialog
+            :dialog="editDialog"
+            formTitle="Edit product"
+            @close="closeEditDialog"
+            @save="save"
+          >
+            <ProductsDialogFields :editedItem="editedItem" />
+          </ModalDialog>
+
+          <!-- Компонент Delete Product -->
+          <ModalDialog
+            :dialog="deleteDialog"
+            formTitle="Delete product"
+            btnName="Delete"
+            @close="deleteDialog = false"
+            @save="removeItem"
+          >
+            <h2>Are you sure?</h2>
+          </ModalDialog>
+        </v-toolbar>
+
+        <!-- Filtering -->
+        <v-card-text>
+          <v-row>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="search"
+                type="text"
+                placeholder="Search"
+              />
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
                 v-model="filter.name"
-                label="Name"
-                @input="getFilteredProducts"
+                type="text"
+                placeholder="Name"
+                @change="getFilteredProducts"
               />
-          </v-col>
-          <v-col>
-            <v-text-field
-                append-icon="mdi-magnify"
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
                 v-model="filter.type"
-                label="Type"
-                @input="getFilteredProducts"
+                type="text"
+                placeholder="Type"
+                @change="getFilteredProducts"
               />
-          </v-col>
-          <v-col>
-            <v-text-field
-                append-icon="mdi-magnify"
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
                 v-model="filter.brand"
-                label="Brand"
-                @input="getFilteredProducts"
+                type="text"
+                placeholder="Brand"
+                @change="getFilteredProducts"
               />
-          </v-col>
-        </v-row>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" dark class="mb-2" @click="createDialog = true"> Add Product </v-btn>
-        
-        <!-- Компонент Add Product -->
-        <ModalDialog
-          :dialog="createDialog"
-          formTitle="Add product"
-          :created="true"
-          @close="closeCreateDialog"
-          @save="create"
-        >
-          <ProductsDialogFields :editedItem="editedItem" />
-        </ModalDialog>
-
-        <!-- Компонент Edit Product -->
-        <ModalDialog
-          :dialog="editDialog"
-          formTitle="Edit product"
-          @close="closeEditDialog"
-          @save='save'
-        >
-          <ProductsDialogFields :editedItem="editedItem" />
-        </ModalDialog>
-
-        <!-- Компонент Delete Product -->
-        <ModalDialog
-          :dialog="deleteDialog"
-          formTitle="Delete product"
-          btnName="Delete"
-          @close="deleteDialog = false"
-          @save="removeItem"
-        >
-          <h2>Are you sure?</h2>
-        </ModalDialog>
-        
-      </v-toolbar>
-    </template>
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="openDeleteDialog(item)"> mdi-delete </v-icon>
-    </template>
-  </v-data-table>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="openDeleteDialog(item)"> mdi-delete </v-icon>
+      </template>
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
@@ -97,7 +114,7 @@ export default {
   middleware: 'auth',
   components: {
     ModalDialog,
-    ProductsDialogFields
+    ProductsDialogFields,
   },
   mixins: [getFilteredItems],
   data() {
@@ -137,8 +154,8 @@ export default {
       filter: {
         name: null,
         type: null,
-        brand: null
-      }
+        brand: null,
+      },
     }
   },
   async mounted() {
@@ -149,7 +166,7 @@ export default {
       getProducts: 'getProducts',
       createProduct: 'createProduct',
       deleteProduct: 'deleteProduct',
-      updateProduct: 'updateProduct'
+      updateProduct: 'updateProduct',
     }),
     getDefaultItem() {
       this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
@@ -174,11 +191,9 @@ export default {
       try {
         await this.createProduct()
         this.$toast.success('Product successfully created')
-      }
-      catch(e) {
+      } catch (e) {
         this.$toast.error('Product create error')
-      }
-      finally {
+      } finally {
         this.closeCreateDialog()
       }
     },
@@ -186,11 +201,9 @@ export default {
       try {
         await this.updateProduct()
         this.$toast.success('Product successfully updated')
-      }
-      catch(e) {
+      } catch (e) {
         this.$toast.error('Product update error')
-      }
-      finally {
+      } finally {
         this.closeEditDialog()
       }
     },
@@ -198,18 +211,18 @@ export default {
       try {
         await this.deleteProduct()
         this.$toast.success('Product successfully deleted')
-      }
-      catch(e) {
+      } catch (e) {
         this.$toast.error('Product delete error')
-      }
-      finally {
+      } finally {
         this.deleteDialog = false
       }
     },
     async getFilteredProducts() {
       let products = await this.getProducts()
       this.products = this.getFilteredItems(products, this.filter)
-    }
+    },
   },
 }
 </script>
+
+

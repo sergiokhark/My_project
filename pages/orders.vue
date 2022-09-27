@@ -1,37 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>
-      Orders
-      <v-spacer></v-spacer>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-col>
-        <v-col>
-          <v-text-field
-            append-icon="mdi-magnify"
-            v-model="filter.number"
-            label="Order number"
-            @input="getFilteredOrders"
-          />
-        </v-col>
-        <v-col>
-          <v-text-field
-            append-icon="mdi-magnify"
-            v-model="filter.created_at"
-            label="Date"
-            @input="getFilteredOrders"
-          />
-        </v-col>
-      </v-row>
-      
-    </v-card-title>
+    <v-card-title> Orders </v-card-title>
     <v-data-table
       :headers="headers"
       :items="orders"
@@ -49,13 +18,41 @@
         >
           <OrderDetails :order="order" />
         </ModalDialog>
+        
+        <!-- Filtering -->
+        <v-card-text>
+          <v-row>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="search"
+                type="text"
+                placeholder="Search"
+              />
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="filter.number"
+                type="text"
+                placeholder="Order number"
+                @change="getFilteredOrders"
+              />
+            </v-col>
+            <v-col>
+              <input
+                class="text-field__input"
+                v-model="filter.created_at"
+                type="text"
+                placeholder="Date"
+                @change="getFilteredOrders"
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
       </template>
       <template v-slot:[`item.status_before`]="{ item }">
-        <v-chip
-          :color="getColor(item.status_before)"
-          label
-          text-color="black"
-        >
+        <v-chip :color="getColor(item.status_before)" label text-color="black">
           {{ item.status_before }}
         </v-chip>
       </template>
@@ -77,7 +74,7 @@ export default {
   middleware: 'auth',
   components: {
     ModalDialog,
-    OrderDetails
+    OrderDetails,
   },
   mixins: [getFilteredItems],
   data() {
@@ -98,36 +95,36 @@ export default {
       orderDialog: false,
       filter: {
         number: null,
-        created_at: null
-      }
+        created_at: null,
+      },
     }
   },
   async mounted() {
     this.orders = await this.getOrders()
     this.order = await this.getOrder()
-    console.log(this.order)
   },
   methods: {
     ...mapActions({
       getOrders: 'getOrders',
-      getOrder: 'getOrder'
+      getOrder: 'getOrder',
     }),
     getColor(status) {
       if (status === 'placed') return '#EEE8AA'
       return '#98FB98'
     },
     changeStatus(item) {
-        let temp = item.status_before
-        item.status_before = item.status
-        item.status = temp
+      let temp = item.status_before
+      item.status_before = item.status
+      item.status = temp
     },
-    showCustomerInfo(){
+    showCustomerInfo() {
       this.orderDialog = true
     },
     async getFilteredOrders() {
       let orders = await this.getOrders()
       this.orders = this.getFilteredItems(orders, this.filter)
-    }
+    },
   },
 }
 </script>
+
